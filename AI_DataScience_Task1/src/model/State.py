@@ -86,6 +86,7 @@ class State:
                 continue
             if value != goal[i]:
                 dist += 1
+        return dist
 
     def manhattan_cost(self):#
         dist = 0
