@@ -1,3 +1,5 @@
+import copy
+
 from AI_DataScience_Task1.src.model import State
 from AI_DataScience_Task1.src.model.SlidingDirection import SlidingDirection
 
@@ -7,9 +9,10 @@ class TreeNode:
             state = State()
         self.state = state
         self.parent = parent
-        self.children = []
+        self.children = None
 
     def generate_neighbors(self):
+        self.children = []
         for direction in SlidingDirection:
             new_state = self.state.make_move(direction)
             if new_state and (self.parent is None or new_state.board != self.parent.state.board):
@@ -25,8 +28,16 @@ class TreeNode:
         for child in self.children:
             child.print_node(parent_id)
 
-    def hamming_algorithm(self):
+    def solve_by_heuristic(self, heuristic_fn):
         return
 
-    def manhattan_algorithm(self):#
-        return
+    def solve_hamming(self):
+        if self.state.is_solvable():
+            return self.solve_by_heuristic(lambda s: s.hamming_distance())
+
+    def solve_manhattan(self):
+        if self.state.is_solvable():
+            return self.solve_by_heuristic(lambda s: s.manhattan_distance())
+
+    def copy_node(self):
+        return TreeNode(copy.deepcopy(self.state), parent=None)

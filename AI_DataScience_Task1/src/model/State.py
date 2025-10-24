@@ -13,6 +13,12 @@ class State:
             self.board = None
             self.randomize()
 
+    def __eq__(self, other):
+        return isinstance(other, State) and self.get_flat() == other.get_flat()
+
+    def __hash__(self):
+        return hash(tuple(self.get_flat()))
+
     def __str__(self):
         board_str = ""
         for row in range(0, len(self.board)):
@@ -25,6 +31,9 @@ class State:
                 board_str += "\n"
 
         return board_str
+
+    def get_flat(self):
+        return [n for row in self.board for n in row]
 
     def randomize(self):
         while self.board is None or not self.is_solvable():
@@ -63,5 +72,37 @@ class State:
 
     def is_finished(self):
         correct = list(range(1, self.size * self.size)) + [None]
-        flat = [n for row in self.board for n in row]
-        return flat == correct
+        return self.get_flat() == correct
+
+    def hamming_cost(self):
+        dist = 0
+        size = self.size
+        goal = list(range(1, size * size)) + [None]
+        flat = self.get_flat()
+
+        for i in range(len(flat)):
+            value = flat[i]
+            if value is None:
+                continue
+            if value != goal[i]:
+                dist += 1
+
+    def manhattan_cost(self):#
+        dist = 0
+        size = self.size
+        flat = self.get_flat()
+
+        for i in range(len(flat)):
+            value = flat[i]
+            if value is None:
+                continue
+
+            current_row = i // size
+            current_col = i % size
+
+            goal_row = (value - 1) // size
+            goal_col = (value - 1) % size
+
+            dist += abs(current_row - goal_row) + abs(current_col - goal_col)
+
+        return dist
