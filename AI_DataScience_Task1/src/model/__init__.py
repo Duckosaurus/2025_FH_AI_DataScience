@@ -78,7 +78,7 @@ def oneRunManhattan(results):
         results["manhattan"]["nodes"].append(nodes_manhattan)
         results["manhattan"]["path_lengths"].append(len(solution_path_manhattan) - 1)
     else:
-        print("⚠️  Keine Lösung gefunden (State evtl. unlösbar).")
+        print("Keine Lösung gefunden (State evtl. unlösbar).")
 
 
 if __name__ == "__main__":
@@ -88,19 +88,12 @@ if __name__ == "__main__":
     }
     for i in range(100):
         oneRunManhattanHamming(results)
-    # total_time_manhattan = sum(results["manhattan"]["times"])
-    # total_time_hamming = sum(results["hamming"]["times"])
-    #
-    # total_nodes_manhattan = sum(results["manhattan"]["nodes"])
-    # total_nodes_hamming = sum(results["hamming"]["nodes"])
 
     print("\n=== Results Summary ===")
     for heuristic, data in results.items():
         print(f"\n{heuristic.capitalize()}:")
-        print(f"  Runs:          {data['run']}")
-        print(f"  Solved:        {data['solved']}")
-        print(f"  Total Times:         {sum(data['times'])} seconds")
-        print(f"  Nodes:         {sum(data['nodes'])}")
-        print(f"  Path Lengths total:  {sum(data['path_lengths'])}")
-
-    # print(results)
+        print(f"  Runs:                 {data['run']}")
+        print(f"  Solved:               {data['solved']}")
+        print(f"  Total Times:          {sum(data['times'])} seconds")
+        print(f"  Nodes:                {sum(data['nodes'])}")
+        print(f"  Path Lengths total:   {sum(data['path_lengths'])}")
