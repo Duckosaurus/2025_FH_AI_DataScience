@@ -5,6 +5,7 @@ import itertools
 from AI_DataScience_Task1.src.model import State
 from AI_DataScience_Task1.src.model.SlidingDirection import SlidingDirection
 
+
 class TreeNode:
     def __init__(self, state=None, parent=None, g_cost=0):
         if state is None:
@@ -42,16 +43,18 @@ class TreeNode:
         start = self
         open_list = []
         counter = itertools.count()  # eindeutiger Tiebreaker
+        expanded_nodes = 0
 
-        heapq.heappush(open_list, (heuristic_fn(start.state),next(counter), start))
+        heapq.heappush(open_list, (heuristic_fn(start.state), next(counter), start))
         closed_set = set()
 
         while open_list:
             _, _, current = heapq.heappop(open_list)
+            expanded_nodes += 1
 
             if current.state.is_finished():
                 # Pfad rückverfolgen
-                return self._reconstruct_path(current)
+                return self._reconstruct_path(current), expanded_nodes
 
             closed_set.add(current.state)
 
@@ -65,9 +68,9 @@ class TreeNode:
                 f_cost = g_cost + heuristic_fn(neighbor_state)
                 neighbor_node = TreeNode(neighbor_state, parent=current, g_cost=g_cost)
 
-                heapq.heappush(open_list, (f_cost, next(counter),neighbor_node))
+                heapq.heappush(open_list, (f_cost, next(counter), neighbor_node))
 
-        return None  # keine Lösung gefunden
+        return None, expanded_nodes  # keine Lösung gefunden
 
     def _reconstruct_path(self, node):
         path = []
